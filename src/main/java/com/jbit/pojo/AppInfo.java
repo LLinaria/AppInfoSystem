@@ -6,6 +6,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import lombok.Data;
 import tk.mybatis.mapper.annotation.KeySql;
 
@@ -84,6 +86,19 @@ public class AppInfo implements Serializable {
 
     @Column(name = "versionId")
     private Long versionid;
+
+    @Transient // 忽略映射 平台名称
+    private  String flatformname;
+    @Transient // 忽略映射 一级分类
+    private  String categorylevel1name;
+    @Transient // 忽略映射 二级分类
+    private  String categorylevel2name;
+    @Transient // 忽略映射 三级分类
+    private  String categorylevel3name;
+    @Transient // 忽略映射 状态名称
+    private  String statusname;
+    @Transient // 忽略映射 版本号
+    private  String versionno;
 
     private static final long serialVersionUID = 1L;
 }

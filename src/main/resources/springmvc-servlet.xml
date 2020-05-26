@@ -15,7 +15,27 @@
     <context:component-scan base-package="com.jbit.web"></context:component-scan>
 
     <!--    开启 MVC注解扫描-->
-    <mvc:annotation-driven></mvc:annotation-driven>
+    <mvc:annotation-driven>
+        <!--        消息转换器  处理 MVC发向页面中文乱码问题-->
+        <mvc:message-converters>
+            <!--            文本消息转换器-->
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/html;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+            <!--            配置json格式消息转换器  Java对象转换成 Json-->
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>json/application;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
     <!--    映射静态资源-->
     <mvc:resources mapping="/statics/**" location="/statics/"></mvc:resources>
@@ -29,4 +49,23 @@
     <!--    请求映射-->
 <!--    <bean name="/hello" class="com.jbit.web.HelloController"></bean>-->
 
+    <!--    文件上传解析器-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8"></property>
+        <property name="maxUploadSize" value="5242880"></property>
+    </bean>
+
+    <!--    登录权限拦截器执行-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!--拦截所有请求-->
+            <mvc:mapping path="/**"/>
+            <!--设置不需要拦截的请求-->
+            <!--1.登录-->
+            <mvc:exclude-mapping path="/dev/login"/>
+            <!--2.静态资源-->
+            <mvc:exclude-mapping path="/statics/**"/>
+            <bean class="com.jbit.interceptors.SysInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>
