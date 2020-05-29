@@ -108,4 +108,36 @@ public class AppInfoService {
     public void save(AppInfo appinfo) {
         appInfoMapper.insertSelective(appinfo);
     }
+
+    public AppInfo queryById(Long id) {
+        AppInfo appInfo = appInfoMapper.selectByPrimaryKey(id);
+        // 处理状态名称
+        appInfo.setStatusname(dataDictionaryService.queryData("APP_STATUS",appInfo.getStatus()).getValuename());
+        return appInfo;
+    }
+
+    public AppInfo queryByID(Long id) {
+        AppInfo appInfo = appInfoMapper.selectByPrimaryKey(id);
+        // 所属平台
+        appInfo.setFlatformname(dataDictionaryService.queryData("APP_FLATFORM",appInfo.getFlatformid()).getValuename());
+        // 加载分类
+        appInfo.setCategorylevel1name(appCategoryService.queryById(appInfo.getCategorylevel1()).getCategoryname());
+        appInfo.setCategorylevel2name(appCategoryService.queryById(appInfo.getCategorylevel2()).getCategoryname());
+        appInfo.setCategorylevel3name(appCategoryService.queryById(appInfo.getCategorylevel3()).getCategoryname());
+        // 处理状态名称
+        appInfo.setStatusname(dataDictionaryService.queryData("APP_STATUS",appInfo.getStatus()).getValuename());
+        return appInfo;
+    }
+
+    public void update(AppInfo appInfo) {
+        appInfoMapper.updateByPrimaryKeySelective(appInfo);
+    }
+
+    public int delete(Long id) {
+        return appInfoMapper.deleteByPrimaryKey(id);
+    }
+
+    public AppInfo querySoftwareNameById(Long appid) {
+        return appInfoMapper.selectByPrimaryKey(appid);
+    }
 }

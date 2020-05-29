@@ -63,7 +63,7 @@ $("#queryCategoryLevel2").change(function(){
 
 $(".addVersion").on("click",function(){
 	var obj = $(this);
-	window.location.href="appversionadd?id="+obj.attr("appinfoid");
+	window.location.href="/appversionadd/"+obj.attr("appinfoid");
 });
 $(".modifyVersion").on("click",function(){
 	var obj = $(this);
@@ -74,7 +74,7 @@ $(".modifyVersion").on("click",function(){
 		if(versionid == null || versionid == ""){
 			alert("该APP应用无版本信息，请先增加版本信息！");
 		}else{
-			window.location.href="appversionmodify?vid="+ versionid + "&aid="+ appinfoid;
+			window.location.href="/appversionmodify/"+ versionid + "/"+ appinfoid;
 		}
 	}else{
 		alert("该APP应用的状态为：【"+obj.attr("statusname")+"】,不能修改其版本信息，只可进行【新增版本】操作！");
@@ -84,7 +84,7 @@ $(".modifyAppInfo").on("click",function(){
 	var obj = $(this);
 	var status = obj.attr("status");
 	if(status == "1" || status == "3"){//待审核、审核未通过状态下才可以进行修改操作
-		window.location.href="appinfomodify?id="+ obj.attr("appinfoid");
+		window.location.href="/dev/app/appinfomodify/"+ obj.attr("appinfoid");
 	}else{
 		alert("该APP应用的状态为：【"+obj.attr("statusname")+"】,不能修改！");
 	}
@@ -106,8 +106,8 @@ $(document).on("click",".saleSwichOpen,.saleSwichClose",function(){
 var saleSwitchAjax = function(appId,obj){
 	$.ajax({
 		type:"PUT",
-		url:appId+"/sale.json",
-		dataType:"json",
+		url:appId+"/sale",
+		// dataType:"json",
 		success:function(data){
 			/*
 			 * resultMsg:success/failed
@@ -115,8 +115,8 @@ var saleSwitchAjax = function(appId,obj){
 			 * appId:appId
 			 * errorCode:param000001
 			 */
-			if(data.errorCode === '0'){
-				if(data.resultMsg === "success"){//操作成功
+			// if(data.errorCode === '0'){
+				if(data.success){//操作成功
 					if("open" === obj.attr("saleSwitch")){
 						//alert("恭喜您，【"+obj.attr("appsoftwarename")+"】的【上架】操作成功");
 						$("#appInfoStatus" + obj.attr("appinfoid")).html("已上架");
@@ -146,20 +146,20 @@ var saleSwitchAjax = function(appId,obj){
 						$("#appInfoStatus" + obj.attr("appinfoid")).hide();
 						$("#appInfoStatus" + obj.attr("appinfoid")).slideDown(300);
 					}
-				}else if(data.resultMsg === "failed"){//删除失败
+				}else{//删除失败
 					if("open" === obj.attr("saleSwitch")){
 						alert("恭喜您，【"+obj.attr("appsoftwarename")+"】的【上架】操作失败");
 					}else if("close" === obj.attr("saleSwitch")){
 						alert("恭喜您，【"+obj.attr("appsoftwarename")+"】的【下架】操作失败");
 					}
 				}
-			}else{
-				if(data.errorCode === 'exception000001'){
-					alert("对不起，系统出现异常，请联系IT管理员");
-				}else if(data.errorCode === 'param000001'){
-					alert("对不起，参数出现错误，您可能在进行非法操作");
-				}
-			}
+			// }else{
+			// 	if(data.errorCode === 'exception000001'){
+			// 		alert("对不起，系统出现异常，请联系IT管理员");
+			// 	}else if(data.errorCode === 'param000001'){
+			// 		alert("对不起，参数出现错误，您可能在进行非法操作");
+			// 	}
+			// }
 		},
 		error:function(data){
 			if("open" === obj.attr("saleSwitch")){
@@ -175,7 +175,7 @@ var saleSwitchAjax = function(appId,obj){
 
 $(".viewApp").on("click",function(){
 	var obj = $(this);
-	window.location.href="appview/"+ obj.attr("appinfoid");
+	window.location.href="/dev/app/appview/"+ obj.attr("appinfoid");
 });
 
 $(".deleteApp").on("click",function(){
@@ -183,18 +183,18 @@ $(".deleteApp").on("click",function(){
 	if(confirm("你确定要删除APP应用【"+obj.attr("appsoftwarename")+"】及其所有的版本吗？")){
 		$.ajax({
 			type:"GET",
-			url:"delapp.json",
+			url:"/dev/app/delapp",
 			data:{id:obj.attr("appinfoid")},
-			dataType:"json",
+			// dataType:"json",
 			success:function(data){
-				if(data.delResult == "true"){//删除成功：移除删除行
+				if(data.success){//删除成功：移除删除行
 					alert("删除成功");
 					obj.parents("tr").remove();
-				}else if(data.delResult == "false"){//删除失败
+				}else{//删除失败
 					alert("对不起，删除AAP应用【"+obj.attr("appsoftwarename")+"】失败");
-				}else if(data.delResult == "notexist"){
+				}/*else if(data.delResult == "notexist"){
 					alert("对不起，APP应用【"+obj.attr("appsoftwarename")+"】不存在");
-				}
+				}*/
 			},
 			error:function(data){
 				alert("对不起，删除失败");

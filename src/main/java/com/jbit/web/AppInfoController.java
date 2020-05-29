@@ -2,10 +2,13 @@ package com.jbit.web;
 
 import com.jbit.entity.JsonResult;
 import com.jbit.pojo.AppInfo;
+import com.jbit.pojo.AppVersion;
 import com.jbit.pojo.DevUser;
 import com.jbit.service.AppCategoryService;
 import com.jbit.service.AppInfoService;
+import com.jbit.service.AppVersionService;
 import com.jbit.service.DataDictionaryService;
+import com.sun.xml.internal.bind.v2.Messages;
 import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Appinfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +33,98 @@ public class AppInfoController {
     @Resource
     private AppCategoryService appCategoryService;
 
+    @Resource
+    private AppVersionService appVersionService;
+
+    @PutMapping("{id}/sale")
+    @ResponseBody
+    public JsonResult delap(@PathVariable Long id){
+        AppInfo appInfo = appInfoService.queryById(id);
+        if(appInfo.getStatus() == 2 || appInfo.getStatus() == 5){
+            appInfo.setStatus(4L);
+            appInfoService.update(appInfo);
+            return new JsonResult(true);
+        }else if(appInfo.getStatus() == 4){
+            appInfo.setStatus(5L);
+            appInfoService.update(appInfo);
+            return new JsonResult(true);
+        }else {
+            return new JsonResult(false);
+        }
+    }
+
+    /**
+     * 查看页面
+     * @param model
+     * @param id
+     * @return
+     */
+    @GetMapping("appview/{id}")
+    public String appview(Model model, @PathVariable Long id){
+        model.addAttribute("appInfo",appInfoService.queryByID(id));
+        model.addAttribute("appVersionList",appVersionService.queryByAppId(id));
+        return "developer/appinfoview";
+    }
+
+    /**
+     * 删除
+     * @param id
+     * @return
+     */
+    @GetMapping("delapp")
+    @ResponseBody
+    public JsonResult delapp(Long id){
+        int i = appInfoService.delete(id);
+        if (i > 0){
+            appVersionService.deleteByAppId(id);
+            return new JsonResult(true);
+        }
+        return new JsonResult(false);
+    }
+
+    /**
+     * 删除 logo 图片
+     * @param id
+     * @param flag
+     * @return
+     */
+    @GetMapping("delfile")
+    @ResponseBody
+    public JsonResult delfile(Long id, String flag){
+        if (flag.equals("logo")){ // 删除 logo
+            AppInfo appInfo = appInfoService.queryById(id);
+            // 通过绝对路径删除图片
+            try {
+                File file = new File(appInfo.getLogolocpath());
+                file.delete(); // 删除文件
+                appInfo.setLogopicpath("");
+                appInfo.setLogolocpath("");
+                appInfoService.update(appInfo);
+                return new JsonResult(true);
+            } catch (Exception e) {
+                return new JsonResult(false);
+            }
+        }
+        return new JsonResult(false);
+    }
+
+    /**
+     * 修改查询
+     * @param model
+     * @param id
+     * @return
+     */
+    @GetMapping("appinfomodify/{id}")
+    public String appinfomodify(Model model, @PathVariable Long id){
+        model.addAttribute("appInfo",appInfoService.queryById(id));
+        return "developer/appinfomodify";
+    }
+
+    /**
+     * 验证 apk 是否存在注册
+     * @param apkname
+     * @return
+     */
     @GetMapping("/apkexist")
     @ResponseBody
     public JsonResult apkexist(String apkname){
@@ -57,13 +152,42 @@ public class AppInfoController {
         }
         // 2.app添加
         DevUser devuser = (DevUser) session.getAttribute("devuser");
-        appinfo.setUpdatedate(new Date());
         appinfo.setDevid(devuser.getId());
         appinfo.setCreatedby(devuser.getId());
         appinfo.setCreationdate(new Date());
         appinfo.setLogopicpath("/statics/uploadfiles/"+a_logoPicPath.getOriginalFilename()); // 相对路径
-        appinfo.setLogolocpath(server_path+"/"+a_logoPicPath.getOriginalFilename());
+        appinfo.setLogolocpath(server_path+a_logoPicPath.getOriginalFilename());
         appInfoService.save(appinfo);
+        return "redirect:/dev/app/list";
+    }
+
+    /**
+     * APP 修改
+     * @param session
+     * @param appinfo
+     * @param attach
+     * @return
+     */
+    @PostMapping("appinfomodify")
+    public String appinfomodify(HttpSession session, AppInfo appinfo, MultipartFile attach){
+        if(!attach.isEmpty()){ // null = true notnull = false
+            // 1.实现文件上传
+            String server_path = session.getServletContext().getRealPath("/statics/uploadfiles/");
+            // 验证大小和图片规格 [未写]
+            try {
+                attach.transferTo(new File(server_path,attach.getOriginalFilename()));
+                appinfo.setLogopicpath("/statics/uploadfiles/"+attach.getOriginalFilename()); // 相对路径
+                appinfo.setLogolocpath(server_path+attach.getOriginalFilename());
+            } catch (IOException e) {
+            }
+        }
+        // 2.app修改
+        DevUser devuser = (DevUser) session.getAttribute("devuser");
+        appinfo.setUpdatedate(new Date());
+        appinfo.setDevid(devuser.getId());
+        appinfo.setModifyby(devuser.getId());
+        appinfo.setModifydate(new Date());
+        appInfoService.update(appinfo);
         return "redirect:/dev/app/list";
     }
 

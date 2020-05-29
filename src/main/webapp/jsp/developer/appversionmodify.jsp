@@ -6,7 +6,7 @@
   <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
       <div class="x_title">
-        <h2>修改APP最新版本信息 <i class="fa fa-user"></i><small>${devUserSession.devName}</small></h2>
+        <h2>修改APP最新版本信息 <i class="fa fa-user"></i><small>${sessionScope.devuser.devname}</small></h2>
             <div class="clearfix"></div>
       </div>
       <div class="x_title">
@@ -58,14 +58,14 @@
 						<tbody>
 							<c:forEach var="appVersion" items="${appVersionList }" varStatus="status">
 								<tr role="row" class="odd">
-									<td tabindex="0" class="sorting_1">${appVersion.appName}</td>
-									<td>${appVersion.versionNo }</td>
-									<td>${appVersion.versionSize }</td>
-									<td>${appVersion.publishStatusName }</td>
+									<td tabindex="0" class="sorting_1">${appVersion.appname}</td>
+									<td>${appVersion.versionno }</td>
+									<td>${appVersion.versionsize }</td>
+									<td>${appVersion.publishstatusname }</td>
 									<td>
-									<a href="${appVersion.downloadLink }">${appVersion.apkFileName }</a>
+									<a href="${appVersion.downloadlink }">${appVersion.apkfilename }</a>
 									</td>
-									<td><fmt:formatDate value="${appVersion.modifyDate }" pattern="yyyy-MM-dd"/></td>
+									<td><fmt:formatDate value="${appVersion.modifydate }" pattern="yyyy-MM-dd"/></td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -84,22 +84,22 @@
         </div>
         <div class="x_content" style="display: block;">
          <br>
-        <form class="form-horizontal form-label-left" action="appversionmodifysave" method="post" enctype="multipart/form-data">
+        <form class="form-horizontal form-label-left" action="/appversionmodify" method="post" enctype="multipart/form-data">
            <input type="hidden" name="id" id="id" value="${appVersion.id}">
-           <input type="hidden" name="appId" id="appId" value="${appVersion.appId}">
+           <input type="hidden" name="appid" id="appId" value="${appVersion.appid}">
           <div class="item form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">版本号 <span class="required">*</span>
             </label>
             <div class="col-md-6 col-sm-6 col-xs-12">
-              <input class="form-control col-md-7 col-xs-12" value="${appVersion.versionNo }" 
-              type="text" readonly="readonly" id="versionNo" name="versionNo">
+              <input class="form-control col-md-7 col-xs-12" value="${appVersion.versionno }"
+              type="text" readonly="readonly" id="versionNo" name="versionno">
             </div>
           </div>
           <div class="item form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="number">版本大小 <span class="required">*</span>
             </label>
             <div class="col-md-6 col-sm-6 col-xs-12">
-              <input type="number" id="versionSize" name="versionSize" value="${appVersion.versionSize }"  required="required"
+              <input type="number" id="versionSize" name="versionsize" value="${appVersion.versionsize }"  required="required"
               data-validate-minmax="10,500"  placeholder="请输入版本大小，单位为Mb" class="form-control col-md-7 col-xs-12">
             </div>
           </div>
@@ -107,7 +107,7 @@
           <div class="item form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12"  for="select">发布状态 <span class="required">*</span></label>
             <div class="col-md-6 col-sm-6 col-xs-12">
-              <input type="hidden" name="publishStatus" id="publishStatus" value="3">预发布
+              <input type="hidden" name="publishstatus" id="publishStatus" value="3">预发布
             </div>
           </div>
         
@@ -115,18 +115,18 @@
             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">版本简介 <span class="required">*</span>
             </label>
             <div class="col-md-6 col-sm-6 col-xs-12">
-              <textarea id="versionInfo" name="versionInfo" required="required"  
+              <textarea id="versionInfo" name="versioninfo" required="required"
               placeholder="请输入本版本的相关信息，本信息作为该版本的详细信息进行版本介绍。" class="form-control col-md-7 col-xs-12">
-              ${appVersion.versionInfo }</textarea>
+              ${appVersion.versioninfo }</textarea>
             </div>
           </div>
            <div class="item form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">apk文件 <span class="required">*</span>
             </label>
             <div class="col-md-6 col-sm-6 col-xs-12">
-            <input type="hidden" id="downloadLink" name="downloadLink" value="${appVersion.downloadLink}"/>
-            <input type="hidden" id="apkLocPath" name="apkLocPath" value="${appVersion.apkLocPath}"/>
-            <input type="hidden" id="apkFileName" name="apkFileName" value="${appVersion.apkFileName}"/>
+            <input type="hidden" id="downloadLink" name="downloadlink" value="${appVersion.downloadlink}"/>
+            <input type="hidden" id="apkLocPath" name="apklocpath" value="${appVersion.apklocpath}"/>
+            <input type="hidden" id="apkFileName" name="apkfilename" value="${appVersion.apkfilename}"/>
 			<div id="uploadfile" style="display: none">
 				<input id="attach" type="file" class="form-control col-md-7 col-xs-12" name="attach">
 				<p><span style="color:red;font-weight: bold;">*注：1、大小不得超过500m.2、文件类型：apk</span></p>
