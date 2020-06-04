@@ -38,7 +38,7 @@ public class DevUserController {
     }
 
     /**
-     * 用户退出
+     * 开发者用户退出
      * @param session
      * @return
      */

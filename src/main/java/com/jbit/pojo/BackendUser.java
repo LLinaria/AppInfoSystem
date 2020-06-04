@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import lombok.Data;
 import tk.mybatis.mapper.annotation.KeySql;
 
@@ -38,6 +40,9 @@ public class BackendUser implements Serializable {
 
     @Column(name = "userPassword")
     private String userpassword;
+
+    @Transient
+    private String usertypename;
 
     private static final long serialVersionUID = 1L;
 }

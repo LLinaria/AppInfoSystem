@@ -63,6 +63,7 @@
             <!--设置不需要拦截的请求-->
             <!--1.登录-->
             <mvc:exclude-mapping path="/dev/login"/>
+            <mvc:exclude-mapping path="/backend/login"/>
             <!--2.静态资源-->
             <mvc:exclude-mapping path="/statics/**"/>
             <bean class="com.jbit.interceptors.SysInterceptor"></bean>

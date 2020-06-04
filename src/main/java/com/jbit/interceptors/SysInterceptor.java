@@ -18,14 +18,39 @@ public class SysInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        //登录请求放行
+        // 目前 session dev（userdev） backend（backuser）
+        // System.out.println(request.getMethod()); // GET/POST
+        // System.out.println(request.getRequestURI()); // /dev/app/list
+        // System.out.println(request.getRequestURL()); // http://localhost:8080/dev/app/list
+        // 登录请求放行
         HttpSession session = request.getSession();
         Object devuser = session.getAttribute("devuser");
-        if(devuser != null){
+        Object backuser = session.getAttribute("backuser");
+        if(devuser!=null || backuser!=null){
             return true;
         }
-        //如果没有登录重定向到登录页面（login）
-        response.sendRedirect("/jsp/devlogin.jsp");
+        response.sendRedirect("/index.jsp");
+//        if(request.getRequestURI().startsWith("/dev")){
+//            Object devuser = session.getAttribute("devuser");
+//            if(devuser != null){
+//                return true;
+//            }
+//            //如果没有登录重定向到登录页面（login）
+//            response.sendRedirect("/jsp/devlogin.jsp");
+//        }else if(request.getRequestURI().startsWith("/backend")){
+//            Object backuser = session.getAttribute("backuser");
+//            if(backuser != null){
+//                return true;
+//            }
+//            //如果没有登录重定向到登录页面（login）
+//            response.sendRedirect("/jsp/backendlogin.jsp");
+//        }else {
+//            Object devuser = session.getAttribute("devuser");
+//            Object backuser = session.getAttribute("backuser");
+//            if(devuser!=null || backuser!=null){
+//                return true;
+//            }
+//        }
         return false;
     }
 }

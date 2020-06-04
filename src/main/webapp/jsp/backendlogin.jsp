@@ -35,10 +35,10 @@
             <form action="/backend/login" method="post">
               <h1>后台管理系统</h1>
               <div>
-                <input type="text" class="form-control" name="usercode" placeholder="请输入用户名" required="" />
+                <input type="text" class="form-control" name="usercode" placeholder="请输入用户名" required="" value="admin" />
               </div>
               <div>
-                <input type="password" class="form-control" name="userpassword" placeholder="请输入密码" required="" />
+                <input type="password" class="form-control" name="userpassword" placeholder="请输入密码" required="" value="123456" />
               </div>
               <span>${error }</span>
               <div>

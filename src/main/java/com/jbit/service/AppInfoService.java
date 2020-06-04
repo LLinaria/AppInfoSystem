@@ -74,7 +74,10 @@ public class AppInfoService {
         if(queryCategoryLevel3 != null && queryCategoryLevel3 != 0){
             criteria.andEqualTo("categorylevel3",queryCategoryLevel3);
         }
-        criteria.andEqualTo("devid",devId);
+        if(devId!=null){
+            criteria.andEqualTo("devid",devId);
+        }
+        example.orderBy("creationdate").desc();
         List<AppInfo> appInfos = appInfoMapper.selectByExample(example);
         // 绑定其他数据
         bindData(appInfos);

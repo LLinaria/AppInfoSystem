@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<c:if test="${empty sessionScope.devuser.devname}">
+<c:if test="${empty sessionScope.devuser}">
 	<script>alert('请登录后再访问该页面！');location.href='/jsp/devlogin.jsp'</script>">
 </c:if>
 <!DOCTYPE html>

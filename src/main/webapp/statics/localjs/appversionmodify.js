@@ -1,7 +1,7 @@
 function delfile(id){
 	$.ajax({
 		type:"GET",//请求类型
-		url:"/delfile",//请求的url
+		url:"/dev/app/delfile",//请求的url
 		data:{id:id,flag:'apk'},//请求参数
 		success:function(data){//data：返回数据（json对象）
 			if(data.success){

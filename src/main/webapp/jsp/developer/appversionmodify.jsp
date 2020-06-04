@@ -84,7 +84,7 @@
         </div>
         <div class="x_content" style="display: block;">
          <br>
-        <form class="form-horizontal form-label-left" action="/appversionmodify" method="post" enctype="multipart/form-data">
+        <form class="form-horizontal form-label-left" action="/dev/app/appversionmodify" method="post" enctype="multipart/form-data">
            <input type="hidden" name="id" id="id" value="${appVersion.id}">
            <input type="hidden" name="appid" id="appId" value="${appVersion.appid}">
           <div class="item form-group">
