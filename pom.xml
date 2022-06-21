@@ -14,7 +14,7 @@
         <mybatis-spring.version>2.0.4</mybatis-spring.version>
         <tk.mybatis.version>4.1.5</tk.mybatis.version>
         <pagehelper.version>5.1.11</pagehelper.version>
-        <mysql.version>5.1.49</mysql.version>
+        <mysql.version>8.0.28</mysql.version>
     </properties>
 
     <!--    web项目打war包-->
